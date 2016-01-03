@@ -52,13 +52,34 @@ To execute the `creative-hand` commands,
   ```
   will create a box which is 5 blocks wide, 2 blocks heigh, and goes 1 block in front (depth).
 
+  Before: ![before /jsp creative-hand box(5, 2, 1)](https://i.imgur.com/wfOcpgN.png)
+  After: ![after /jsp creative-hand box(5, 2, 1)](https://i.imgur.com/ZOe2oiL.png)
+
+  Notice the number of dirt blocks in inventory in both images.
+
 - Commands can be chained by using `.`. For example,
   ```js
   up(2).box(2, 1, 1).left(5).box(4, 2, 3)
   // full command would be "/jsp creative-hand up(2).box(2, 1, 1).left(5).box(4, 2, 3)"
   ```
   will first move 2 blocks up the current block, will then create a box 2 blocks wide, 1 block hight and 1 block to front, and will then move 5 blocks left from the rightmost side of created box, and will then create a box 4 blocks deep, 2 blocks high and 3 blocks in front.
+  
+  Before: ![before /jsp creative-hand up(2).box(2, 1, 1).left(5).box(4, 2, 3)](https://i.imgur.com/7V5y4N0.png)
+  After: ![after /jsp creative-hand up(2).box(2, 1, 1).left(5).box(4, 2, 3)](http://i.imgur.com/hQ5GnjV.png)
 
+## Installations
+You need to be a moderator/server-operator/whatever minecraft people call it (I am pretty new to minecraft world, a week old atm).
+
+### Requirements
+
+- This mod will most likely work with [CanaryMod](https://www.canarymod.net/) only. So it's better if you are using CanaryMod
+- It's written in javascript for [ScriptCraft](https://www.canarymod.net/), so you need to have this installed as well
+
+### Installing it
+
+- Simply download the `creative-hand.js` file and store it in `<your server>/scriptcraft/plugings` folder. You can just clone this repository in there (i.e in `scriptcraft/plugins` directory) too, it will work as well.
+ 
+This mod provide very little power to users, and there is cost associated with using that power too. So it keeps the game fun, and for people like me, it increases the fun of the game by many folds (bold statement, I just finished building this and am yet to have the said fun). This power is little only in that it doesn't allow creating things out of thin air. However it shall allow users to flex their creative brain muscles and enjoy the game with coder powers while playing as regular players.
 
 ## Actual reason for which I created it
 
