@@ -82,51 +82,71 @@ function parseDroneCommand(cmd, player, allowedOps) {
 };
 
 /**
- * Draw a box of given dimensions using the item in current player's item in hand.
- * This function is supposed to extend scriptcraft's drone. If used directly from console (in game), it uses `self`, or it expect drone to have
- * a this.player (i.e drone.player) property which provides the player whose inventory is to be used.
+ * Create a function which will draw the given `boxType` box using the item in hand.
  *
- * - It reduces the number of blocks from the player's inventory.
- * - It fails with message (echo) if player don't have sufficient items in inventory to create the desired block
- * - If a block can't be used to draw Drone.box, it gets reduced from the inventory anyway. That's the cost of you being stupid.
+ * @param {string} boxType Valid types: box, box0
  *
- * @param {number} width
- * @param {number} height
- * @param {number} depth
- * @returns {Drone}
+ * @returns {Function}
  */
-function drawBoxForHand(width, height, depth) {
-    // Uses self if used directly from prompt, or expects the drone to have a player property which provide current player
-    var player  = typeof self === 'undefined' ? this.player : self;
-    var inventory = player.getInventory();
-    var item = inventory.getItemInHand();
-    // If current player has an item in the
-    var itemId = item ? item.getType().id : 0;
-
-    var width = parseInt(width),
-        height = parseInt(height),
-        depth = parseInt(depth);
-
-    var numberOfBlocksRequired = width * height * depth;
-
-    var hasRequiredItems = true;
-
-    if (itemId !== 0) {
-        hasRequiredItems = inventory.hasItemStack(itemId, numberOfBlocksRequired) || item ? item.amount >= numberOfBlocksRequired : false;
+function drawBoxForHand (boxType) {
+    if (boxType === 'box' || boxType === 'box0') {
+        boxType = boxType;
+    } else {
+        boxType = 'box';
     }
 
-    if (!hasRequiredItems) {
-        echo(player, 'Not enough items for building box. Required: ' + numberOfBlocksRequired + ' items');
+    /**
+     * Draw a box of given dimensions using the item in current player's item in hand.
+     * This function is supposed to extend scriptcraft's drone. If used directly from console (in game), it uses `self`, or it expect drone to have
+     * a this.player (i.e drone.player) property which provides the player whose inventory is to be used.
+     *
+     * - It reduces the number of blocks from the player's inventory.
+     * - It fails with message (echo) if player don't have sufficient items in inventory to create the desired block
+     * - If a block can't be used to draw Drone.box, it gets reduced from the inventory anyway. That's the cost of you being stupid.
+     *
+     * @param {number} width
+     * @param {number} height
+     * @param {number} depth
+     * @returns {Drone}
+     */
+    return function (width, height, depth) {
+        // Uses self if used directly from prompt, or expects the drone to have a player property which provide current player
+        var player  = typeof self === 'undefined' ? this.player : self;
+        var inventory = player.getInventory();
+        var item = inventory.getItemInHand();
+        // If current player has an item in the
+        var itemId = item ? item.getType().id : 0;
+
+        var width = parseInt(width),
+            height = parseInt(height),
+            depth = parseInt(depth);
+
+        var numberOfBlocksRequired = width * height * depth;
+
+        if (boxType === 'box0') {
+            numberOfBlocksRequired = ((width * depth) - ((width - 2) * (depth - 2))) * height;
+        }
+
+        var hasRequiredItems = true;
+
+        if (itemId !== 0) {
+            hasRequiredItems = inventory.hasItemStack(itemId, numberOfBlocksRequired) || item ? item.amount >= numberOfBlocksRequired : false;
+        }
+
+        if (!hasRequiredItems) {
+            echo(player, 'Not enough items for building box. Required: ' + numberOfBlocksRequired + ' items');
+            return this;
+        }
+
+        this[boxType](itemId, width, height, depth);
+
+        inventory.decreaseItemStackSize(itemId, numberOfBlocksRequired);
         return this;
     }
-
-    this.box(itemId, width, height, depth);
-
-    inventory.decreaseItemStackSize(itemId, numberOfBlocksRequired);
-    return this;
 };
 
-Drone.extend('handBox', drawBoxForHand);
+Drone.extend('handBox', drawBoxForHand('box'));
+Drone.extend('handBox0', drawBoxForHand('box0'));
 
 command('creative-hand', function (args, player) {
     function showHelp(player) {
@@ -139,7 +159,7 @@ command('creative-hand', function (args, player) {
     }
 
     var droneCommand = args.join('');
-    var allowedOps = ['up', 'down', 'left', 'right', 'fwd', 'back', 'turn', 'box'];
+    var allowedOps = ['up', 'down', 'left', 'right', 'fwd', 'back', 'turn', 'box', 'box0'];
 
     var ops = parseDroneCommand(droneCommand, player, allowedOps);
     var drone = new Drone(player);
@@ -156,6 +176,10 @@ command('creative-hand', function (args, player) {
     ops.forEach(function (op) {
         if (op.name === 'box') {
             op.name = 'handBox';
+        }
+
+        if (op.name === 'box0') {
+            op.name = 'handBox0';
         }
 
         cmd += '.' + op.name + '(' + op.args.join(',') + ')';

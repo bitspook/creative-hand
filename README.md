@@ -37,6 +37,11 @@ It's really easy to use `creative-hand`. There are two type of commands:
 
       `box` command creates a box of given width, height and depth (in blocks), filled with the item currently in players hand. Simple, right?
 
+  - **box0(width, height, depth)**
+
+      `box0` command creates an empty box of given width, height and depth (in blocks), filled with air. i.e a hollow box.
+
+
 Your invisible (aka creative) hand holds the current cursored(?) block. You move your hand around with the movement commands, and create stuff with creation commands. Movement commands listed above are obvious to use I think.
 
 ### Executing the commands
@@ -63,9 +68,14 @@ To execute the `creative-hand` commands,
   // full command would be "/jsp creative-hand up(2).box(2, 1, 1).left(5).box(4, 2, 3)"
   ```
   will first move 2 blocks up the current block, will then create a box 2 blocks wide, 1 block hight and 1 block to front, and will then move 5 blocks left from the rightmost side of created box, and will then create a box 4 blocks deep, 2 blocks high and 3 blocks in front.
-  
+
   Before: ![before /jsp creative-hand up(2).box(2, 1, 1).left(5).box(4, 2, 3)](https://i.imgur.com/7V5y4N0.png)
   After: ![after /jsp creative-hand up(2).box(2, 1, 1).left(5).box(4, 2, 3)](http://i.imgur.com/hQ5GnjV.png)
+
+  Similar example with empty box: `/jsp creative-hand up(1).box0(4, 1, 4)`:
+
+  Before: ![before /jsp creative-hand up(1).box0(4, 1, 4)](http://i.imgur.com/LZtuCn3.png)
+  After: ![after /jsp creative-hand up(1).box0(4, 1, 4)](http://i.imgur.com/QrApUw4.png)
 
 ## Installations
 You need to be a moderator/server-operator/whatever minecraft people call it (I am pretty new to minecraft world, a week old atm).
@@ -78,7 +88,7 @@ You need to be a moderator/server-operator/whatever minecraft people call it (I 
 ### Installing it
 
 - Simply download the `creative-hand.js` file and store it in `<your server>/scriptcraft/plugings` folder. You can just clone this repository in there (i.e in `scriptcraft/plugins` directory) too, it will work as well.
- 
+
 This mod provide very little power to users, and there is cost associated with using that power too. So it keeps the game fun, and for people like me, it increases the fun of the game by many folds (bold statement, I just finished building this and am yet to have the said fun). This power is little only in that it doesn't allow creating things out of thin air. However it shall allow users to flex their creative brain muscles and enjoy the game with coder powers while playing as regular players.
 
 ## Actual reason for which I created it
